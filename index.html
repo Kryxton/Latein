@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vokabeltrainer</title>
+
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      padding-top: 3.5rem;
+      background: #f8f9fa;
+      font-family: "Segoe UI", sans-serif;
+    }
+    .hidden { display: none !important; }
+    .smooth { transition: all .3s ease; }
+    #home-btn {
+      position: fixed; top: .75rem; left: .75rem;
+      font-size: 1.5rem; color: #0d6efd; cursor: pointer; z-index:1030;
+    }
+    .card-choice {
+      cursor: pointer; border: none; border-radius: .75rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card-choice:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    #quiz-section .card {
+      border-radius: .75rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden; position: relative;
+    }
+    #feedback {
+      min-height: 1.5em; font-weight: 600; text-align: center; margin-top: .5rem;
+    }
+    .flash-green { animation: flash-green 1s both; }
+    .flash-yellow{ animation: flash-yellow 1s both; }
+    .flash-red   { animation: flash-red 1s both; }
+    @keyframes flash-green {
+      from { background-color: rgba(40,167,69,0.3); } to { background-color: transparent; }
+    }
+    @keyframes flash-yellow {
+      from { background-color: rgba(255,193,7,0.3); } to { background-color: transparent; }
+    }
+    @keyframes flash-red {
+      from { background-color: rgba(220,53,69,0.3); } to { background-color: transparent; }
+    }
+    .review-item {
+      opacity: 0; transform: translateY(-10px);
+      animation: fade-in 0.5s forwards;
+    }
+    @keyframes fade-in { to { opacity:1; transform: translateY(0); } }
+    .dot {
+      display:inline-block; width:12px; height:12px; border-radius:50%;
+      margin-right:8px;
+    }
+    .dot-green  { background:#28a745; }
+    .dot-yellow { background:#ffc107; }
+    .dot-red    { background:#dc3545; }
+  </style>
+</head>
+<body>
+
+  <i id="home-btn" class="bi bi-house-door-fill hidden" title="Zurück"></i>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="#">Vokabeltrainer</a>
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+          Lektion wählen
+        </button>
+        <ul class="dropdown-menu" id="lesson-menu">
+          <li><a class="dropdown-item lesson-item active" data-lesson="all" href="#">Alle Lektionen</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div id="main-menu" class="row row-cols-1 row-cols-md-2 g-4">
+      <div class="col">
+        <div id="start-test" class="card card-choice smooth">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-play-circle-fill display-4 text-primary"></i>
+            <h5 class="mt-3">Neuer Test</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div id="test-red" class="card card-choice smooth">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-arrow-repeat display-4 text-danger"></i>
+            <h5 class="mt-3">Rote Vokabeln</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="count-selection" class="text-center my-5 hidden smooth">
+      <button class="btn btn-outline-primary mx-2" data-count="15">15 Wörter</button>
+      <button class="btn btn-outline-primary mx-2" data-count="25">25 Wörter</button>
+      <button id="choose-count" class="btn btn-outline-secondary mx-2">Eigenes</button>
+      <div id="custom-count-div" class="mt-3 hidden">
+        <input type="number" id="custom-count" class="form-control d-inline-block w-auto" placeholder="Anzahl" min="1">
+        <button id="custom-count-btn" class="btn btn-primary ms-2">OK</button>
+      </div>
+    </div>
+
+    <div id="quiz-section" class="hidden smooth">
+      <div class="card mx-auto" style="max-width:480px;">
+        <div class="card-body p-4">
+          <h4 id="question-term" class="text-center mb-4"></h4>
+          <input id="answer-input" type="text" class="form-control mb-2" placeholder="Deine Antwort" autocomplete="off">
+          <div id="feedback"></div>
+          <button id="submit-answer" class="btn btn-success w-100 mt-2">Prüfen</button>
+          <div id="progress" class="mt-2 text-end text-muted"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-section" class="text-center hidden smooth">
+      <h4 class="mb-3">Auswertung</h4>
+      <p id="result-text" class="mb-3"></p>
+      <div id="review-container" class="text-start"></div>
+      <button id="back-menu" class="btn btn-outline-secondary mt-4">Zurück</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // — Deine Lektionen 1–8 hier vollständig einfügen —
+    const lessons = {
+  "Lektion 1": [
+    { term:"puella",  meaning:"das Mädchen" },
+    { term:"serva",   meaning:"die Sklavin, die Dienerin" },
+    { term:"silva",   meaning:"der Wald" },
+    { term:"via",     meaning:"der Weg, die Straße" },
+    { term:"villa",   meaning:"das Haus, das Landhaus" },
+    { term:"avus",    meaning:"der Großvater" },
+    { term:"campus",  meaning:"das Feld, der freie Platz" },
+    { term:"equus",   meaning:"das Pferd" },
+    { term:"murus",   meaning:"die Mauer" },
+    { term:"servus",  meaning:"der Sklave, der Diener" },
+    { term:"vicus",   meaning:"das Dorf, die Gasse" },
+    { term:"et",      meaning:"und" },
+    { term:"familia", meaning:"die Familie" }
+  ],
+
+  "Lektion 2": [
+    { term:"esse",    meaning:"sein, sich befinden" },
+    { term:"est",     meaning:"er (sie, es) ist" },
+    { term:"sunt",    meaning:"sie sind" },
+    { term:"amīca",   meaning:"die Freundin" },
+    { term:"rīdēre",  meaning:"lachen, auslachen" },
+    { term:"nōn",     meaning:"nicht" },
+    { term:"cūr?",    meaning:"warum?" },
+    { term:"pārēre",  meaning:"gehorchen" },
+    { term:"monēre",  meaning:"mahnen, ermahnen" },
+    { term:"dēbēre",  meaning:"müssen, sollen" },
+    { term:"quid?",   meaning:"was?" },
+    { term:"timēre",  meaning:"fürchten, Angst haben" },
+    { term:"oculus",  meaning:"das Auge" },
+    { term:"dolēre",  meaning:"schmerzen, wehtun" },
+    { term:"nunc",    meaning:"nun, jetzt" },
+    { term:"tacēre",  meaning:"schweigen, verschweigen" },
+    { term:"Lydus servus", meaning:"der Sklave Lydus" }
+  ],
+
+  "Lektion 3": [
+    { term:"domīnus", meaning:"der Herr" },
+    { term:"ibi",     meaning:"dort" },
+    { term:"sedēre",  meaning:"sitzen" },
+    { term:"sed",     meaning:"aber, sondern" },
+    { term:"respondēre", meaning:"antworten" },
+    { term:"augēre",     meaning:"vergrößern, vermehren" },
+    { term:"nam",        meaning:"denn, nämlich" },
+    { term:"tamen",      meaning:"dennoch, jedoch" },
+    { term:"adhūc",      meaning:"bis jetzt, noch" },
+    { term:"neque",      meaning:"und nicht, auch nicht" },
+    { term:"neque ... neque", meaning:"weder ... noch" },
+    { term:"quis?",      meaning:"wer?" },
+    { term:"docēre",     meaning:"lehren, unterrichten" },
+    { term:"lingua",     meaning:"die Sprache, die Rede" }
+  ],
+
+  "Lektion 4": [
+    { term:"gaudēre",  meaning:"sich freuen" },
+    { term:"amīcus",   meaning:"der Freund" },
+    { term:"bene",     meaning:"gut" },
+    { term:"studēre",  meaning:"sich bemühen, studieren" },
+    { term:"tabula",   meaning:"die Schreib-Tafel, das Gemälde" },
+    { term:"tenēre",   meaning:"halten, festhalten, besitzen; beherrschen" },
+    { term:"praebēre", meaning:"geben, hinhalten" },
+    { term:"iam",      meaning:"schon, bereits; nun" },
+    { term:"prīmō",    meaning:"zuerst" },
+    { term:"tum",      meaning:"da, dann, darauf, damals" },
+    { term:"rēctē",    meaning:"richtig, zu Recht" },
+    { term:"nōn iam",  meaning:"nicht mehr" },
+    { term:"saepe",    meaning:"oft" },
+    { term:"numquam",  meaning:"niemals" },
+    { term:"sīc",      meaning:"so" },
+    { term:"semper",   meaning:"immer" }
+  ],
+
+  "Lektion 5": [
+    { term:"sonus",     meaning:"der Ton, der Klang, das Geräusch" },
+    { term:"terrēre",   meaning:"erschrecken" },
+    { term:"latēre",    meaning:"verborgen sein" },
+    { term:"subitō",    meaning:"plötzlich" },
+    { term:"gladius",   meaning:"das Schwert" },
+    { term:"scelerātus",meaning:"der Verbrecher" },
+    { term:"flēre",     meaning:"weinen, beweinen" },
+    { term:"placēre",   meaning:"gefallen" },
+    { term:"torquēre",  meaning:"drehen; quälen" },
+    { term:"tantum",    meaning:"nur" },
+    { term:"cui?",      meaning:"wem?" },
+    { term:"statim",    meaning:"sofort" },
+    { term:"etiam",     meaning:"auch, sogar" },
+    { term:"iterum",    meaning:"wiederum, zum zweiten Mal" },
+    { term:"itaque",    meaning:"deshalb" }
+  ],
+
+  "Lektion 6": [
+    { term:"cibus",    meaning:"die Nahrung, die Speise, das Futter" },
+    { term:"habēre",   meaning:"haben, halten" },
+    { term:"aqua",     meaning:"das Wasser" },
+    { term:"complēre", meaning:"auffüllen, erfüllen" },
+    { term:"cōpia",    meaning:"die Menge, der Vorrat" },
+    { term:"ventus",   meaning:"der Wind" },
+    { term:"dēlēre",   meaning:"zerstören, vernichten" },
+    { term:"populus",  meaning:"das Volk" },
+    { term:"Aeolus",   meaning:"(der Gott der Winde)" },
+    { term:"deus",     meaning:"der Gott, die Gottheit" },
+    { term:"nātūra",   meaning:"die Natur, das Wesen, die Beschaffenheit" },
+    { term:"flūvius",  meaning:"der Fluss" },
+    { term:"profectō", meaning:"sicherlich, tatsächlich" }
+  ],
+
+  "Lektion 7": [
+    { term:"valēre",   meaning:"gesund sein, stark sein, Einfluss haben" },
+    { term:"valē!",     meaning:"Leb wohl!" },
+    { term:"valēte!",   meaning:"Lebt wohl!" },
+    { term:"diū",      meaning:"lange (Zeit)" },
+    { term:"lacrima",  meaning:"die Träne" },
+    { term:"vidēre",   meaning:"sehen" },
+    { term:"movēre",   meaning:"bewegen, beeindrucken" },
+    { term:"mox",      meaning:"bald" },
+    { term:"tandem",   meaning:"endlich" },
+    { term:"īnsula",   meaning:"die Insel; der Wohnblock" },
+    { term:"Rōma",     meaning:"Rom" },
+    { term:"turba",    meaning:"die (Menschen-)Menge" },
+    { term:"toga",     meaning:"die Toga" },
+    { term:"tunica",   meaning:"die Tunika" },
+    { term:"fīlia",    meaning:"die Tochter" },
+    { term:"laetitia", meaning:"die Freude" }
+  ],
+
+  "Lektion 8": [
+    { term:"amāre",     meaning:"lieben" },
+    { term:"libenter",  meaning:"gerne" },
+    { term:"domina",    meaning:"die Herrin, die Dame" },
+    { term:"rogāre",    meaning:"fragen, bitten" },
+    { term:"labōrō",    meaning:"arbeiten, sich anstrengen" },
+    { term:"parāre",    meaning:"(vor)bereiten, vorhaben (m. Inf.); erwerben" },
+    { term:"vocāre",    meaning:"rufen; nennen, benennen" },
+    { term:"ubi?",      meaning:"wo?" },
+    { term:"properāre", meaning:"eilen, sich beeilen" }
+  ]
+};
+
+    let selected = "all",
+        green = [], yellow = [], red = [],
+        pool = [], results = [], idx = 0;
+
+    // Elemente
+    const $ = id => document.getElementById(id);
+    const homeBtn   = $('home-btn'),
+          lessonMenu= $('lesson-menu'),
+          mainMenu  = $('main-menu'),
+          startBtn  = $('start-test'),
+          redBtn    = $('test-red'),
+          countSel  = $('count-selection'),
+          quizSec   = $('quiz-section'),
+          termEl    = $('question-term'),
+          inputEl   = $('answer-input'),
+          fbDiv     = $('feedback'),
+          submitBtn = $('submit-answer'),
+          progEl    = $('progress'),
+          resultSec = $('result-section'),
+          resultTxt = $('result-text'),
+          reviewDiv = $('review-container'),
+          backBtn   = $('back-menu'),
+          chooseBtn = $('choose-count'),
+          customDiv = $('custom-count-div'),
+          customIn  = $('custom-count'),
+          customOK  = $('custom-count-btn');
+
+    function load() {
+      green  = JSON.parse(localStorage.getItem('green')  || '[]');
+      yellow = JSON.parse(localStorage.getItem('yellow') || '[]');
+      red    = JSON.parse(localStorage.getItem('red')    || '[]');
+    }
+    function save() {
+      localStorage.setItem('green',  JSON.stringify([...new Set(green)]));
+      localStorage.setItem('yellow', JSON.stringify([...new Set(yellow)]));
+      localStorage.setItem('red',    JSON.stringify([...new Set(red)]));
+    }
+
+    window.addEventListener('load', () => {
+      load();
+      // Menu füllen
+      Object.keys(lessons).forEach(l => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a class="dropdown-item lesson-item" data-lesson="${l}" href="#">${l}</a>`;
+        lessonMenu.appendChild(li);
+      });
+      document.querySelectorAll('.lesson-item').forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          document.querySelectorAll('.lesson-item').forEach(x=>x.classList.remove('active'));
+          el.classList.add('active');
+          selected = el.dataset.lesson;
+        });
+      });
+    });
+
+    const show = el => el.classList.remove('hidden'),
+          hide = el => el.classList.add('hidden'),
+          allVocab = () => Object.values(lessons).flat(),
+          shuffle = arr => arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+
+    function clean(s){
+      return s.toLowerCase()
+              .replace(/^(der|die|das)\s+/,'')
+              .replace(/[.,!?;:]/g,'')
+              .trim();
+    }
+
+    function begin(useRed=false, count=null){
+      pool = useRed
+        ? red.map(t=> allVocab().find(v=>v.term===t)).filter(Boolean)
+        : (selected==="all" ? allVocab() : lessons[selected]);
+      if(!pool.length) return alert(useRed?'Keine roten Vokabeln.':'Keine Vokabeln.');
+      const n = (!count||count>pool.length)?pool.length:count;
+      pool = shuffle(pool).slice(0,n);
+      idx = 0; results = [];
+      hide(mainMenu); hide(countSel); hide(resultSec);
+      show(homeBtn); show(quizSec);
+      showQuestion();
+    }
+
+    function showQuestion(){
+      const it = pool[idx];
+      termEl.textContent = it.term;
+      inputEl.value = '';
+      fbDiv.textContent = '';
+      progEl.textContent = `${idx+1} / ${pool.length}`;
+      inputEl.focus();
+    }
+
+    function checkAnswer(){
+      const raw = inputEl.value;
+      if(!raw.trim()) return;
+      const it = pool[idx], user = clean(raw);
+      const meaningsClean = it.meaning.map(clean);
+      let status;
+      if(meaningsClean.includes(user)){
+        status='flash-green'; green.push(it.term);
+      } else if(meaningsClean.some(m=>m.startsWith(user))){
+        status='flash-yellow'; yellow.push(it.term);
+      } else {
+        status='flash-red'; red.push(it.term);
+      }
+      save();
+      const card = quizSec.querySelector('.card');
+      card.classList.add(status);
+      fbDiv.textContent = 
+        (status==='flash-green' ? '✅ Richtig! ' :
+         status==='flash-yellow'? '⚠️ Fast! '   :
+         '❌ Falsch! ')
+        + it.meaning.join(', ');
+      results.push({term:it.term,status,meanings:it.meaning});
+      card.addEventListener('animationend', next, {once:true});
+    }
+
+    function next(){
+      const card = quizSec.querySelector('.card');
+      card.classList.remove('flash-green','flash-yellow','flash-red');
+      idx++;
+      idx < pool.length ? showQuestion() : finishTest();
+    }
+
+    function finishTest(){
+      hide(quizSec);
+      resultTxt.innerHTML =
+        `<span class="badge bg-success me-2">Grün: ${green.length}</span>`+
+        `<span class="badge bg-warning me-2">Gelb: ${yellow.length}</span>`+
+        `<span class="badge bg-danger">Rot: ${red.length}</span>`;
+      reviewDiv.innerHTML = '';
+      results.forEach((r,i)=>{
+        const div = document.createElement('div');
+        div.className = 'review-item mt-2';
+        div.style.animationDelay = `${i*0.15}s`;
+        const dot = document.createElement('span');
+        dot.className = 'dot ' + (r.status==='flash-green'? 'dot-green': r.status==='flash-yellow'? 'dot-yellow':'dot-red');
+        div.appendChild(dot);
+        div.insertAdjacentText('beforeend', `${r.term}: ${r.meanings.join(', ')}`);
+        reviewDiv.appendChild(div);
+      });
+      show(resultSec);
+    }
+
+    // Event-Bindings
+    startBtn.addEventListener('click', ()=>{ show(countSel); hide(startBtn); hide(redBtn); });
+    redBtn  .addEventListener('click', ()=>begin(true));
+    submitBtn.addEventListener('click', checkAnswer);
+    inputEl .addEventListener('keydown', e=>{ if(e.key==='Enter') checkAnswer(); });
+    countSel.querySelectorAll('button[data-count]').forEach(b=>b.addEventListener('click', ()=>begin(false,+b.dataset.count)));
+    chooseBtn.addEventListener('click', ()=>show(customDiv));
+    customOK .addEventListener('click', ()=> {
+      const n = parseInt(customIn.value);
+      n>0 ? begin(false,n) : alert('Bitte gültige Zahl.');
+    });
+    backBtn.addEventListener('click', ()=> {
+      hide(resultSec); hide(homeBtn);
+      show(mainMenu); show(startBtn); show(redBtn);
+      hide(countSel); hide(quizSec);
+    });
+    homeBtn.addEventListener('click', ()=>backBtn.click());
+  </script>
+</body>
+</html>
