@@ -36,21 +36,15 @@
     .chap-checkbox { margin-right: 0.5rem; }
     .btn-chap { margin: 0.25rem; }
     .flash-green { animation: flash-green 0.8s both; }
-    .flash-yellow { animation: flash-yellow 0.8s both; }
     .flash-red { animation: flash-red 0.8s both; }
     @keyframes flash-green { 
       from { background: rgba(40,167,69,0.3); } 
-      to { background: transparent; } 
-    }
-    @keyframes flash-yellow { 
-      from { background: rgba(255,193,7,0.3); } 
       to { background: transparent; } 
     }
     @keyframes flash-red { 
       from { background: rgba(220,53,69,0.3); } 
       to { background: transparent; } 
     }
-    /* Mobile Optimierung */
     .container { padding: 1rem; }
     .card { 
       max-width: 100%; 
@@ -65,7 +59,6 @@
       h5 { font-size: 1.1rem; }
       .row-cols-md-4 > .col { margin-bottom: 1rem; }
     }
-    /* Darkmode-Styling */
     body.dark-mode {
       background-color: #121212;
       color: #eee;
@@ -140,7 +133,6 @@
   </nav>
 
   <div class="container py-3">
-    <!-- Startseite -->
     <div id="main-menu" class="row row-cols-1 row-cols-md-4 g-3">
       <div class="col"><div id="start-test" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-play-circle-fill display-4 text-primary"></i><h5 class="mt-2">Neuer Test</h5></div></div></div>
       <div class="col"><div id="test-red" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-arrow-repeat display-4 text-danger"></i><h5 class="mt-2">Rote Vokabeln</h5></div></div></div>
@@ -149,7 +141,6 @@
       <div class="col"><div id="start-challenge" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-bar-chart-line display-4 text-warning"></i><h5 class="mt-2">Challenge</h5><small>20 Vokabeln</small></div></div></div>
     </div>
 
-    <!-- Test-Typ Auswahl -->
     <div id="test-type-selection" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3 text-center">
@@ -160,7 +151,6 @@
       </div>
     </div>
 
-    <!-- Listen ausfragen -->
     <div id="list-selection" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3">
@@ -171,7 +161,6 @@
       </div>
     </div>
 
-    <!-- Wortanzahl-Auswahl -->
     <div id="count-selection" class="text-center my-4 hidden smooth">
       <button class="btn btn-outline-primary mx-1 mb-2" data-count="10">10 Wörter</button>
       <button class="btn btn-outline-primary mx-1 mb-2" data-count="20">20 Wörter</button>
@@ -182,7 +171,6 @@
       </div>
     </div>
 
-    <!-- Kapitel ansehen -->
     <div id="chapter-display" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3">
@@ -195,7 +183,6 @@
       </div>
     </div>
 
-    <!-- Challenge Einstellung -->
     <div id="challenge-display" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3 text-center">
@@ -207,7 +194,6 @@
       </div>
     </div>
 
-    <!-- Quiz -->
     <div id="quiz-section" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3">
@@ -220,7 +206,6 @@
       </div>
     </div>
 
-    <!-- Ergebnis -->
     <div id="result-section" class="text-center hidden smooth mt-3">
       <h4 class="mb-3">Auswertung</h4>
       <p id="result-text"></p>
@@ -228,7 +213,6 @@
       <button id="back-menu" class="btn btn-outline-secondary mt-3">Zurück</button>
     </div>
 
-    <!-- Eigene Listen -->
     <div id="custom-lists-section" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3">
@@ -240,7 +224,6 @@
       </div>
     </div>
 
-    <!-- Listendetails -->
     <div id="list-detail-section" class="hidden smooth mt-3">
       <div class="card">
         <div class="card-body p-3">
@@ -260,7 +243,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // ### Daten ###
+    // Daten
     const lessons = {
       "Lektion 1": [
         { term:"puella",  meaning:"das Mädchen" },
@@ -507,14 +490,14 @@
       ]
     };
 
-    // ### Hilfsfunktionen ###
+    // Hilfsfunktionen
     const clean = s => s.toLowerCase().replace(/^(der|die|das)\s+/, '').trim();
     function allVocab() { return Object.entries(lessons).flatMap(([lek, arr]) => arr.map(v => ({ ...v, lesson: lek }))); }
     function shuffle(a) { return a.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(v => v[1]); }
     function show(el) { el.classList.remove('hidden'); }
     function hide(el) { el.classList.add('hidden'); }
 
-    // ### DOM-Referenzen ###
+    // DOM-Referenzen
     const refs = {
       mainMenu: document.getElementById('main-menu'),
       startTest: document.getElementById('start-test'),
@@ -568,15 +551,13 @@
       darkmodeToggle: document.getElementById('darkmode-toggle')
     };
 
-    // ### Zustand ###
+    // Zustand
     let state = {
       selectedChapters: new Set(["all"]),
       greenFolder: [],
-      yellowFolder: [],
       redFolder: [],
       testList: [],
       idx: 0,
-      searchHistory: JSON.parse(localStorage.getItem('searchHistory') || '[]'),
       customListsArr: JSON.parse(localStorage.getItem('customLists') || '[]'),
       currentListIndex: null,
       flameCount: parseInt(localStorage.getItem('flameCount') || '0'),
@@ -587,23 +568,18 @@
       isChallenge: false
     };
 
-    // ### Persistenz ###
+    // Persistenz
     function loadFolders() {
       state.greenFolder = JSON.parse(localStorage.getItem('greenFolder') || '[]');
-      state.yellowFolder = JSON.parse(localStorage.getItem('yellowFolder') || '[]');
       state.redFolder = JSON.parse(localStorage.getItem('redFolder') || '[]');
     }
     function saveFolders() {
       localStorage.setItem('greenFolder', JSON.stringify([...new Set(state.greenFolder)]));
-      localStorage.setItem('yellowFolder', JSON.stringify([...new Set(state.yellowFolder)]));
       localStorage.setItem('redFolder', JSON.stringify([...new Set(state.redFolder)]));
-    }
-    function saveHistory() {
-      localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
     }
     loadFolders();
 
-    // ### Flames & Challenge ###
+    // Flames & Challenge
     const today = new Date().toISOString().slice(0, 10);
     refs.flameCountEl.textContent = state.flameCount ? `${state.flameCount}🔥` : '';
     function updateChallengeButton() {
@@ -615,7 +591,7 @@
     }
     updateChallengeButton();
 
-    // ### Dropdown Multiselect ###
+    // Dropdown Multiselect
     Object.keys(lessons).forEach(lek => {
       const li = document.createElement('li');
       li.innerHTML = `<label class="dropdown-item">
@@ -648,7 +624,7 @@
       });
     });
 
-    // ### Test-Typ Auswahl ###
+    // Test-Typ Auswahl
     refs.startTest.addEventListener('click', () => {
       hide(refs.mainMenu);
       show(refs.testTypeSelection);
@@ -674,7 +650,7 @@
       show(refs.testTypeSelection);
     });
 
-    // ### Listen ausfragen ###
+    // Listen ausfragen
     function loadListSelection() {
       refs.listSelectionUl.innerHTML = '';
       state.customListsArr.forEach((list, index) => {
@@ -689,12 +665,16 @@
     function selectListForTest(index) {
       state.selectedListForTest = index;
       state.maxVocabCount = state.customListsArr[index].vocabs.length;
+      if (state.maxVocabCount === 0) {
+        alert('Diese Liste enthält keine Vokabeln.');
+        return;
+      }
       hide(refs.listSelection);
       show(refs.countSel);
       adjustCountSelection(state.maxVocabCount);
     }
 
-    // ### Wortanzahl-Auswahl ###
+    // Wortanzahl-Auswahl
     function adjustCountSelection(maxCount) {
       const countButtons = refs.countSel.querySelectorAll('[data-count]');
       countButtons.forEach(btn => {
@@ -727,7 +707,7 @@
       }
     });
 
-    // ### Kapitel ansehen ###
+    // Kapitel ansehen
     function populateChapters() {
       refs.chapSel.innerHTML = '';
       refs.chapList.innerHTML = '';
@@ -735,27 +715,47 @@
         const btn = document.createElement('button');
         btn.className = 'btn btn-outline-secondary btn-chap';
         btn.textContent = lek;
-        btn.onclick = () => {
-          refs.chapList.innerHTML = '';
-          lessons[lek].forEach(v => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = `${v.term} — ${v.meaning}`;
-            refs.chapList.appendChild(li);
-          });
-        };
+        btn.onclick = () => displayChapter(lek);
         refs.chapSel.appendChild(btn);
       });
     }
+
+    function displayChapter(lek) {
+      refs.chapList.innerHTML = '';
+      lessons[lek].forEach(v => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.textContent = `${v.term} — ${v.meaning}`;
+        refs.chapList.appendChild(li);
+      });
+    }
+
     refs.viewChapters.addEventListener('click', () => {
       hide(refs.mainMenu);
       show(refs.chapDisp);
       refs.searchInput.value = '';
       populateChapters();
     });
+
+    refs.searchInput.addEventListener('input', () => {
+      const query = clean(refs.searchInput.value);
+      if (!query) {
+        refs.chapList.innerHTML = '';
+        return;
+      }
+      const results = allVocab().filter(v => clean(v.term).includes(query) || clean(v.meaning).includes(query));
+      refs.chapList.innerHTML = '';
+      results.forEach(v => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.textContent = `${v.term} — ${v.meaning} (aus ${v.lesson})`;
+        refs.chapList.appendChild(li);
+      });
+    });
+
     refs.backChap.addEventListener('click', goHome);
 
-    // ### Challenge Handling ###
+    // Challenge Handling
     refs.startChallenge.addEventListener('click', () => {
       if (state.lastDate === today) {
         alert("Du hast die Challenge heute schon abgeschlossen 😎");
@@ -767,14 +767,19 @@
       hide(refs.mainMenu);
       show(refs.challengeDisp);
     });
+
     refs.challengeRange.addEventListener('input', () => {
       refs.challengeVal.textContent = `Kapitel ${refs.challengeRange.value}`;
       localStorage.setItem('challengeUpTo', refs.challengeRange.value);
     });
+
     refs.challengeStart.addEventListener('click', () => {
       const up = parseInt(refs.challengeRange.value);
       const all = allVocab().filter(v => parseInt(v.lesson.split(' ')[1]) <= up);
-      if (!all.length) return alert('Keine Vokabeln in den gewählten Kapiteln.');
+      if (!all.length) {
+        alert('Keine Vokabeln in den gewählten Kapiteln.');
+        return;
+      }
       state.testList = shuffle(all).slice(0, 20);
       state.idx = 0;
       state.isChallenge = true;
@@ -783,8 +788,9 @@
       showQuestion();
     });
 
-    // ### Quiz / Test-Logik ###
+    // Quiz / Test-Logik
     refs.testRed.addEventListener('click', () => beginTest(true));
+
     function beginTest(useRed = false, count = null) {
       let src;
       if (useRed) {
@@ -884,7 +890,7 @@
       }
     });
 
-    // ### Navigation ###
+    // Navigation
     function goHome() {
       hide(refs.quizSection);
       hide(refs.resultSection);
@@ -900,7 +906,7 @@
     refs.backMenu.addEventListener('click', goHome);
     refs.homeBtn.addEventListener('click', goHome);
 
-    // ### Eigene Listen ###
+    // Eigene Listen
     function saveCustomLists() {
       localStorage.setItem('customLists', JSON.stringify(state.customListsArr));
     }
@@ -975,7 +981,7 @@
       }
     });
 
-    // ### Darkmode ###
+    // Darkmode
     function toggleDarkmode() {
       document.body.classList.toggle('dark-mode');
       const isDarkmode = document.body.classList.contains('dark-mode');
