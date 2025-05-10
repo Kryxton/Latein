@@ -8,7 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body { 
-      padding-top: 3.5rem; 
+      padding-top: 4rem; 
       background: #f8f9fa; 
       font-family: "Segoe UI", sans-serif; 
       transition: background-color 0.3s ease, color 0.3s ease; 
@@ -35,16 +35,6 @@
     .dropdown-menu { max-height: 300px; overflow-y: auto; }
     .chap-checkbox { margin-right: 0.5rem; }
     .btn-chap { margin: 0.25rem; }
-    #search-container { position: relative; }
-    #search-history { 
-      position: absolute; 
-      top: 100%; 
-      left: 0; 
-      right: 0; 
-      z-index: 1000; 
-      max-height: 200px; 
-      overflow-y: auto; 
-    }
     .flash-green { animation: flash-green 0.8s both; }
     .flash-yellow { animation: flash-yellow 0.8s both; }
     .flash-red { animation: flash-red 0.8s both; }
@@ -60,25 +50,20 @@
       from { background: rgba(220,53,69,0.3); } 
       to { background: transparent; } 
     }
-    #caesar-section .card { 
-      width: 100%; 
-      max-width: none; 
-      height: calc(100vh - 3.5rem - 2rem); 
-    }
-    #caesar-iframe { 
-      width: 100%; 
-      height: calc(100% - 2.5rem); 
-      border: none; 
-    }
-    #challenge-display .card { max-width: 480px; }
-    #challenge-range { width: 100%; }
     /* Mobile Optimierung */
+    .container { padding: 1rem; }
     .card { 
       max-width: 100%; 
+      width: 100%; 
       margin: 0 auto; 
     }
-    .container { 
-      padding: 1rem; 
+    @media (max-width: 576px) {
+      .navbar-brand { font-size: 1rem; }
+      #home-btn { font-size: 1.2rem; }
+      .card-body { padding: 1rem; }
+      .btn { font-size: 0.9rem; }
+      h5 { font-size: 1.1rem; }
+      .row-cols-md-4 > .col { margin-bottom: 1rem; }
     }
     /* Darkmode-Styling */
     body.dark-mode {
@@ -110,10 +95,6 @@
     body.dark-mode .text-muted {
       color: #ccc !important;
     }
-    body.dark-mode .navbar-brand,
-    body.dark-mode .dropdown-toggle {
-      color: #eee;
-    }
     .navbar .container-fluid {
       display: flex;
       justify-content: space-between;
@@ -131,11 +112,11 @@
 </head>
 <body>
   <nav class="navbar navbar-expand-lg fixed-top border-bottom">
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-3">
       <div class="d-flex align-items-center">
-        <span id="flame-count" class="text-warning"></span>
-        <i id="home-btn" class="bi bi-house-door-fill mx-2" title="Zurück zum Start"></i>
-        <span class="navbar-brand">Vokabeltrainer</span>
+        <span id="flame-count" class="text-warning me-2"></span>
+        <i id="home-btn" class="bi bi-house-door-fill" title="Zurück zum Start"></i>
+        <span class="navbar-brand ms-2">Vokabeltrainer</span>
       </div>
       <div class="d-flex align-items-center">
         <button id="darkmode-toggle" class="btn btn-link me-2">
@@ -143,7 +124,7 @@
         </button>
         <div class="dropdown">
           <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-            Kapitel für Test wählen
+            Kapitel für Test
           </button>
           <ul class="dropdown-menu" id="lesson-dropdown">
             <li>
@@ -158,22 +139,21 @@
     </div>
   </nav>
 
-  <div class="container py-4">
+  <div class="container py-3">
     <!-- Startseite -->
-    <div id="main-menu" class="row row-cols-1 row-cols-md-4 g-4">
-      <div class="col"><div id="start-test" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-play-circle-fill display-4 text-primary"></i><h5 class="mt-3">Neuer Test</h5></div></div></div>
-      <div class="col"><div id="test-red" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-arrow-repeat display-4 text-danger"></i><h5 class="mt-3">Rote Vokabeln</h5></div></div></div>
-      <div class="col"><div id="view-chapters" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-book display-4 text-secondary"></i><h5 class="mt-3">Kapitel ansehen</h5></div></div></div>
-      <div class="col"><div id="frag-caesar" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-chat-dots display-4 text-success"></i><h5 class="mt-3">Frag Caesar</h5></div></div></div>
-      <div class="col"><div id="custom-lists" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-list display-4 text-info"></i><h5 class="mt-3">Eigene Listen</h5></div></div></div>
-      <div class="col"><div id="start-challenge" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-bar-chart-line display-4 text-warning"></i><h5 class="mt-3">Challenge</h5><small>20 Vokabeln</small></div></div></div>
+    <div id="main-menu" class="row row-cols-1 row-cols-md-4 g-3">
+      <div class="col"><div id="start-test" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-play-circle-fill display-4 text-primary"></i><h5 class="mt-2">Neuer Test</h5></div></div></div>
+      <div class="col"><div id="test-red" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-arrow-repeat display-4 text-danger"></i><h5 class="mt-2">Rote Vokabeln</h5></div></div></div>
+      <div class="col"><div id="view-chapters" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-book display-4 text-secondary"></i><h5 class="mt-2">Kapitel ansehen</h5></div></div></div>
+      <div class="col"><div id="custom-lists" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-list display-4 text-info"></i><h5 class="mt-2">Eigene Listen</h5></div></div></div>
+      <div class="col"><div id="start-challenge" class="card card-choice smooth"><div class="card-body text-center py-4"><i class="bi bi-bar-chart-line display-4 text-warning"></i><h5 class="mt-2">Challenge</h5><small>20 Vokabeln</small></div></div></div>
     </div>
 
     <!-- Test-Typ Auswahl -->
-    <div id="test-type-selection" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4 text-center">
-          <h5 class="mb-4">Wähle den Test-Typ</h5>
+    <div id="test-type-selection" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3 text-center">
+          <h5 class="mb-3">Wähle den Test-Typ</h5>
           <button id="test-chapters" class="btn btn-primary mb-2 w-100">Kapitel</button>
           <button id="test-lists" class="btn btn-primary w-100">Eigene Listen</button>
         </div>
@@ -181,9 +161,9 @@
     </div>
 
     <!-- Listen ausfragen -->
-    <div id="list-selection" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4">
+    <div id="list-selection" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3">
           <h5 class="text-center mb-3">Wähle eine Liste</h5>
           <ul id="list-selection-ul" class="list-group"></ul>
           <button id="back-from-list-selection" class="btn btn-outline-secondary w-100 mt-3">Zurück</button>
@@ -192,109 +172,86 @@
     </div>
 
     <!-- Wortanzahl-Auswahl -->
-    <div id="count-selection" class="text-center my-5 hidden smooth">
-      <button class="btn btn-outline-primary mx-2" data-count="15">15 Wörter</button>
-      <button class="btn btn-outline-primary mx-2" data-count="25">25 Wörter</button>
-      <button id="choose-count" class="btn btn-outline-secondary mx-2">Eigenes</button>
-      <div id="custom-count-div" class="mt-3 hidden">
+    <div id="count-selection" class="text-center my-4 hidden smooth">
+      <button class="btn btn-outline-primary mx-1 mb-2" data-count="10">10 Wörter</button>
+      <button class="btn btn-outline-primary mx-1 mb-2" data-count="20">20 Wörter</button>
+      <button id="choose-count" class="btn btn-outline-secondary mx-1 mb-2">Eigenes</button>
+      <div id="custom-count-div" class="mt-2 hidden">
         <input type="number" id="custom-count" class="form-control d-inline-block w-auto" placeholder="Anzahl" min="1">
         <button id="custom-count-btn" class="btn btn-primary ms-2">OK</button>
       </div>
     </div>
 
     <!-- Kapitel ansehen -->
-    <div id="chapter-display" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4">
+    <div id="chapter-display" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3">
           <h5 class="text-center mb-3">Kapitel ansehen</h5>
-          <div id="search-container" class="mb-3">
-            <input type="text" id="search-input" class="form-control" placeholder="Suche ein Wort">
-            <ul id="search-history" class="list-group hidden"></ul>
-          </div>
+          <input type="text" id="search-input" class="form-control mb-3" placeholder="Suche ein Wort">
           <div id="chapter-selection" class="text-center my-3"></div>
-          <div id="search-results" class="hidden">
-            <h6>Kapitel</h6><div id="chap-buttons-search" class="mb-3"></div>
-            <h6>Vokabeln</h6><ul id="vocab-list-search" class="list-group"></ul>
-          </div>
           <ul id="chapter-list" class="list-group mb-3"></ul>
           <button id="back-from-chapter" class="btn btn-outline-secondary w-100">Zurück</button>
         </div>
       </div>
     </div>
 
-    <!-- Frag Caesar -->
-    <div id="caesar-section" class="hidden smooth">
-      <div class="card mx-auto">
-        <div class="card-body p-2">
-          <iframe id="caesar-iframe" src="https://www.frag-caesar.de"></iframe>
-          <button id="back-caesar" class="btn btn-outline-secondary mt-2 w-100">Zurück</button>
-        </div>
-      </div>
-    </div>
-
     <!-- Challenge Einstellung -->
-    <div id="challenge-display" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4 text-center">
-          <h5 class="mb-4">Bis Kapitel … gelernt?</h5>
+    <div id="challenge-display" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3 text-center">
+          <h5 class="mb-3">Bis Kapitel … gelernt?</h5>
           <input type="range" id="challenge-range" min="1" max="13" value="1">
           <div class="mt-2"><span id="challenge-val">Kapitel 1</span></div>
-          <button id="challenge-start" class="btn btn-warning mt-4">Challenge starten</button>
+          <button id="challenge-start" class="btn btn-warning mt-3">Challenge starten</button>
         </div>
       </div>
     </div>
 
     <!-- Quiz -->
-    <div id="quiz-section" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4">
-          <h4 id="question-term" class="text-center mb-4"></h4>
+    <div id="quiz-section" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3">
+          <h4 id="question-term" class="text-center mb-3"></h4>
           <input id="answer-input" type="text" class="form-control mb-2" placeholder="Deine Antwort" autocomplete="off">
-          <div id="feedback"></div>
-          <button id="submit-answer" class="btn btn-success w-100 mt-2">Prüfen</button>
+          <div id="feedback" class="mb-2"></div>
+          <button id="submit-answer" class="btn btn-success w-100">Prüfen</button>
           <div id="progress" class="mt-2 text-end text-muted"></div>
         </div>
       </div>
     </div>
 
     <!-- Ergebnis -->
-    <div id="result-section" class="text-center hidden smooth">
+    <div id="result-section" class="text-center hidden smooth mt-3">
       <h4 class="mb-3">Auswertung</h4>
       <p id="result-text"></p>
       <div id="review-container" class="text-start"></div>
-      <button id="back-menu" class="btn btn-outline-secondary mt-4">Zurück</button>
+      <button id="back-menu" class="btn btn-outline-secondary mt-3">Zurück</button>
     </div>
 
     <!-- Eigene Listen -->
-    <div id="custom-lists-section" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4">
+    <div id="custom-lists-section" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3">
           <h5 class="text-center mb-3">Eigene Vokabellisten</h5>
-          <button id="create-new-list" class="btn btn-primary mb-3">Neue Liste erstellen</button>
-          <ul id="custom-lists-ul" class="list-group"></ul>
-          <button id="back-from-lists" class="btn btn-outline-secondary w-100 mt-3">Zurück</button>
+          <button id="create-new-list" class="btn btn-primary mb-3 w-100">Neue Liste erstellen</button>
+          <ul id="custom-lists-ul" class="list-group mb-3"></ul>
+          <button id="back-from-lists" class="btn btn-outline-secondary w-100">Zurück</button>
         </div>
       </div>
     </div>
 
     <!-- Listendetails -->
-    <div id="list-detail-section" class="hidden smooth">
-      <div class="card mx-auto" style="max-width:480px;">
-        <div class="card-body p-4">
+    <div id="list-detail-section" class="hidden smooth mt-3">
+      <div class="card">
+        <div class="card-body p-3">
           <h5 id="list-detail-title" class="text-center mb-3"></h5>
-          <div id="list-search-container" class="mb-3">
-            <input type="text" id="list-search-input" class="form-control" placeholder="Vokabel aus Kapiteln suchen">
-            <ul id="list-search-results" class="list-group mt-2 hidden"></ul>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Begriff" id="new-term">
+            <input type="text" class="form-control" placeholder="Bedeutung" id="new-meaning">
+            <button class="btn btn-primary" id="add-vocab-inline">Hinzufügen</button>
           </div>
           <ul id="list-detail-ul" class="list-group mb-3"></ul>
-          <div class="mt-3">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Begriff" id="new-term">
-              <input type="text" class="form-control" placeholder="Bedeutung" id="new-meaning">
-              <button class="btn btn-primary" id="add-vocab-inline">Hinzufügen</button>
-            </div>
-          </div>
-          <button id="back-from-detail" class="btn btn-outline-secondary w-100 mt-3">Zurück</button>
+          <button id="back-from-detail" class="btn btn-outline-secondary w-100">Zurück</button>
         </div>
       </div>
     </div>
@@ -551,11 +508,7 @@
     };
 
     // ### Hilfsfunktionen ###
-    function getMeanings(m) {
-      if (Array.isArray(m)) return m;
-      return typeof m === 'string' ? m.split(/\s*,\s*/).map(s => s.trim()) : [];
-    }
-    const clean = s => s.toLowerCase().replace(/^(der|die|das)\s+/, '').replace(/[.,!?;:]/g, '').trim();
+    const clean = s => s.toLowerCase().replace(/^(der|die|das)\s+/, '').trim();
     function allVocab() { return Object.entries(lessons).flatMap(([lek, arr]) => arr.map(v => ({ ...v, lesson: lek }))); }
     function shuffle(a) { return a.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(v => v[1]); }
     function show(el) { el.classList.remove('hidden'); }
@@ -567,7 +520,6 @@
       startTest: document.getElementById('start-test'),
       testRed: document.getElementById('test-red'),
       viewChapters: document.getElementById('view-chapters'),
-      fragCaesar: document.getElementById('frag-caesar'),
       customLists: document.getElementById('custom-lists'),
       startChallenge: document.getElementById('start-challenge'),
       testTypeSelection: document.getElementById('test-type-selection'),
@@ -583,14 +535,8 @@
       chapDisp: document.getElementById('chapter-display'),
       backChap: document.getElementById('back-from-chapter'),
       searchInput: document.getElementById('search-input'),
-      historyList: document.getElementById('search-history'),
-      searchResults: document.getElementById('search-results'),
       chapSel: document.getElementById('chapter-selection'),
       chapList: document.getElementById('chapter-list'),
-      chapBtnSearch: document.getElementById('chap-buttons-search'),
-      vocabListSearch: document.getElementById('vocab-list-search'),
-      caesarSection: document.getElementById('caesar-section'),
-      backCaesar: document.getElementById('back-caesar'),
       challengeDisp: document.getElementById('challenge-display'),
       challengeRange: document.getElementById('challenge-range'),
       challengeVal: document.getElementById('challenge-val'),
@@ -619,9 +565,7 @@
       newMeaning: document.getElementById('new-meaning'),
       addVocabInline: document.getElementById('add-vocab-inline'),
       lessonDropdown: document.getElementById('lesson-dropdown'),
-      darkmodeToggle: document.getElementById('darkmode-toggle'),
-      listSearchInput: document.getElementById('list-search-input'),
-      listSearchResults: document.getElementById('list-search-results')
+      darkmodeToggle: document.getElementById('darkmode-toggle')
     };
 
     // ### Zustand ###
@@ -631,7 +575,6 @@
       yellowFolder: [],
       redFolder: [],
       testList: [],
-      results: [],
       idx: 0,
       searchHistory: JSON.parse(localStorage.getItem('searchHistory') || '[]'),
       customListsArr: JSON.parse(localStorage.getItem('customLists') || '[]'),
@@ -797,7 +740,7 @@
           lessons[lek].forEach(v => {
             const li = document.createElement('li');
             li.className = 'list-group-item';
-            li.textContent = `${v.term} — ${getMeanings(v.meaning).join(', ')}`;
+            li.textContent = `${v.term} — ${v.meaning}`;
             refs.chapList.appendChild(li);
           });
         };
@@ -808,78 +751,9 @@
       hide(refs.mainMenu);
       show(refs.chapDisp);
       refs.searchInput.value = '';
-      hide(refs.searchResults);
-      hide(refs.historyList);
       populateChapters();
-      show(refs.chapSel);
-      show(refs.chapList);
     });
     refs.backChap.addEventListener('click', goHome);
-
-    // ### Suche & History ###
-    refs.searchInput.addEventListener('focus', () => {
-      if (!state.searchHistory.length) return;
-      refs.historyList.innerHTML = '';
-      state.searchHistory.slice(-5).reverse().forEach(q => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item list-group-item-action';
-        li.textContent = q;
-        li.onclick = () => {
-          refs.searchInput.value = q;
-          hide(refs.historyList);
-          refs.searchInput.dispatchEvent(new Event('input'));
-        };
-        refs.historyList.appendChild(li);
-      });
-      show(refs.historyList);
-    });
-    refs.searchInput.addEventListener('input', () => {
-      hide(refs.historyList);
-      const q = clean(refs.searchInput.value);
-      if (!q) {
-        hide(refs.searchResults);
-        show(refs.chapSel);
-        show(refs.chapList);
-        return;
-      }
-      hide(refs.chapSel);
-      hide(refs.chapList);
-      show(refs.searchResults);
-      refs.chapBtnSearch.innerHTML = '';
-      Object.keys(lessons).filter(lek => lek.toLowerCase().includes(q)).forEach(lek => {
-        const b = document.createElement('button');
-        b.className = 'btn btn-outline-secondary btn-chap';
-        b.textContent = lek;
-        b.onclick = () => { state.selectedChapters = new Set([lek]); beginTest(false); };
-        refs.chapBtnSearch.appendChild(b);
-      });
-      refs.vocabListSearch.innerHTML = '';
-      allVocab().forEach(v => {
-        const syn = getMeanings(v.meaning).map(clean);
-        if (v.term.toLowerCase().includes(q) || syn.some(m => m.toLowerCase().includes(q))) {
-          const li = document.createElement('li');
-          li.className = 'list-group-item';
-          li.textContent = `${v.term} — ${syn.join(', ')} (${v.lesson})`;
-          refs.vocabListSearch.appendChild(li);
-        }
-      });
-    });
-    refs.searchInput.addEventListener('blur', () => {
-      setTimeout(() => hide(refs.historyList), 200);
-      const q = clean(refs.searchInput.value);
-      if (q && state.searchHistory[state.searchHistory.length - 1] !== q) {
-        state.searchHistory.push(q);
-        if (state.searchHistory.length > 50) state.searchHistory.shift();
-        saveHistory();
-      }
-    });
-
-    // ### Frag Caesar ###
-    refs.fragCaesar.addEventListener('click', () => {
-      hide(refs.mainMenu);
-      show(refs.caesarSection);
-    });
-    refs.backCaesar.addEventListener('click', goHome);
 
     // ### Challenge Handling ###
     refs.startChallenge.addEventListener('click', () => {
@@ -902,7 +776,6 @@
       const all = allVocab().filter(v => parseInt(v.lesson.split(' ')[1]) <= up);
       if (!all.length) return alert('Keine Vokabeln in den gewählten Kapiteln.');
       state.testList = shuffle(all).slice(0, 20);
-      state.results = [];
       state.idx = 0;
       state.isChallenge = true;
       hide(refs.challengeDisp);
@@ -926,11 +799,12 @@
         }
       }
       if (!src || !src.length) {
-        return alert(useRed ? 'Keine roten Vokabeln.' : 'Keine Vokabeln in dieser Auswahl.');
+        alert(useRed ? 'Keine roten Vokabeln.' : 'Keine Vokabeln in dieser Auswahl.');
+        goHome();
+        return;
       }
       const n = (!count || count > src.length) ? src.length : count;
       state.testList = shuffle(src).slice(0, n);
-      state.results = [];
       state.idx = 0;
       state.isChallenge = false;
       hide(refs.countSel);
@@ -949,37 +823,27 @@
     }
 
     function check() {
-      const it = state.testList[state.idx],
-            inputs = refs.answerInput.value.split(/[,;]/).map(clean).filter(u => u);
-      if (!inputs.length) {
+      const it = state.testList[state.idx];
+      const input = clean(refs.answerInput.value);
+      if (!input) {
         refs.feedbackEl.textContent = 'Bitte eingeben.';
         return;
       }
-      const syn = getMeanings(it.meaning).map(clean),
-            corr = inputs.filter(u => syn.includes(u)),
-            wrong = inputs.filter(u => !syn.includes(u));
+      const meaning = clean(it.meaning);
       let status;
-      if (corr.length === syn.length && !wrong.length) {
+      if (input === meaning) {
         status = 'flash-green';
         state.greenFolder.push(it.term);
-        state.redFolder = state.redFolder.filter(t => t !== it.term);
-        state.yellowFolder = state.yellowFolder.filter(t => t !== it.term);
-      } else if (corr.length) {
-        status = 'flash-yellow';
-        state.yellowFolder.push(it.term);
         state.redFolder = state.redFolder.filter(t => t !== it.term);
       } else {
         status = 'flash-red';
         state.redFolder.push(it.term);
         state.greenFolder = state.greenFolder.filter(t => t !== it.term);
-        state.yellowFolder = state.yellowFolder.filter(t => t !== it.term);
       }
       saveFolders();
       const cardEl = refs.quizSection.querySelector('.card');
       cardEl.classList.add(status);
-      refs.feedbackEl.textContent = (status === 'flash-green' ? '✅ Richtig! ' :
-                                    status === 'flash-yellow' ? '⚠️ Fast! ' : '❌ Falsch! ') +
-                                    getMeanings(it.meaning).join(', ');
+      refs.feedbackEl.textContent = status === 'flash-green' ? '✅ Richtig!' : `❌ Falsch! Richtig: ${it.meaning}`;
       setTimeout(() => {
         cardEl.classList.remove(status);
         if (state.idx < state.testList.length - 1) {
@@ -993,17 +857,12 @@
       hide(refs.quizSection);
       refs.resultText.innerHTML = `
         <span class="badge bg-success me-2">Grün: ${state.greenFolder.length}</span>
-        <span class="badge bg-warning me-2">Gelb: ${state.yellowFolder.length}</span>
         <span class="badge bg-danger">Rot: ${state.redFolder.length}</span>`;
       refs.reviewCont.innerHTML = '';
-      state.testList.forEach((r, i) => {
+      state.testList.forEach(r => {
         const d = document.createElement('div');
-        d.className = 'review-item mt-2';
-        d.style.animationDelay = `${i * 0.1}s`;
-        const dot = document.createElement('span');
-        dot.className = 'dot ' + (state.greenFolder.includes(r.term) ? 'dot-green' : state.yellowFolder.includes(r.term) ? 'dot-yellow' : 'dot-red');
-        d.appendChild(dot);
-        d.insertAdjacentText('beforeend', `${r.term}: ${getMeanings(r.meaning).join(', ')}`);
+        d.className = 'mt-2';
+        d.textContent = `${r.term}: ${r.meaning} (${state.greenFolder.includes(r.term) ? 'Richtig' : 'Falsch'})`;
         refs.reviewCont.appendChild(d);
       });
       show(refs.resultSection);
@@ -1031,7 +890,6 @@
       hide(refs.resultSection);
       hide(refs.countSel);
       hide(refs.chapDisp);
-      hide(refs.caesarSection);
       hide(refs.challengeDisp);
       hide(refs.customListsSection);
       hide(refs.listDetailSection);
@@ -1072,7 +930,7 @@
       state.customListsArr[index].vocabs.forEach((vocab, vocabIndex) => {
         const li = document.createElement('li');
         li.className = 'list-group-item d-flex justify-content-between';
-        li.innerHTML = `${vocab.term} — ${vocab.meaning} (${vocab.lesson || 'Manuell'}) <button class="btn btn-danger btn-sm" onclick="removeVocab(${index}, ${vocabIndex})">Löschen</button>`;
+        li.innerHTML = `${vocab.term} — ${vocab.meaning} <button class="btn btn-danger btn-sm" onclick="removeVocab(${index}, ${vocabIndex})">Löschen</button>`;
         refs.listDetailUl.appendChild(li);
       });
     }
@@ -1083,8 +941,6 @@
       updateListDisplay(index);
       hide(refs.customListsSection);
       show(refs.listDetailSection);
-      refs.listSearchInput.value = '';
-      hide(refs.listSearchResults);
     }
 
     window.removeVocab = function(listIndex, vocabIndex) {
@@ -1109,7 +965,7 @@
       const term = refs.newTerm.value.trim();
       const meaning = refs.newMeaning.value.trim();
       if (term && meaning) {
-        state.customListsArr[state.currentListIndex].vocabs.push({ term, meaning, lesson: 'Manuell' });
+        state.customListsArr[state.currentListIndex].vocabs.push({ term, meaning });
         saveCustomLists();
         updateListDisplay(state.currentListIndex);
         refs.newTerm.value = '';
@@ -1118,44 +974,6 @@
         alert('Bitte beide Felder ausfüllen.');
       }
     });
-
-    // ### Suche für eigene Listen ###
-    refs.listSearchInput.addEventListener('input', () => {
-      const q = clean(refs.listSearchInput.value);
-      if (!q) {
-        hide(refs.listSearchResults);
-        return;
-      }
-      show(refs.listSearchResults);
-      refs.listSearchResults.innerHTML = '';
-      allVocab().forEach(v => {
-        const syn = getMeanings(v.meaning).map(clean);
-        if (v.term.toLowerCase().includes(q) || syn.some(m => m.toLowerCase().includes(q))) {
-          const li = document.createElement('li');
-          li.className = 'list-group-item d-flex justify-content-between align-items-center';
-          li.textContent = `${v.term} — ${syn.join(', ')} (${v.lesson})`;
-          const addBtn = document.createElement('button');
-          addBtn.className = 'btn btn-success btn-sm';
-          addBtn.innerHTML = '<i class="bi bi-plus"></i>';
-          addBtn.onclick = () => addVocabToList(v);
-          li.appendChild(addBtn);
-          refs.listSearchResults.appendChild(li);
-        }
-      });
-    });
-
-    function addVocabToList(vocab) {
-      if (state.currentListIndex === null) return;
-      state.customListsArr[state.currentListIndex].vocabs.push({ 
-        term: vocab.term, 
-        meaning: vocab.meaning, 
-        lesson: vocab.lesson 
-      });
-      saveCustomLists();
-      updateListDisplay(state.currentListIndex);
-      refs.listSearchInput.value = '';
-      hide(refs.listSearchResults);
-    }
 
     // ### Darkmode ###
     function toggleDarkmode() {
