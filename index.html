@@ -708,7 +708,6 @@
     // ### Test-Typ Auswahl ###
     refs.startTest.addEventListener('click', () => {
       hide(refs.mainMenu);
-      hide(refs.startChallenge);
       show(refs.testTypeSelection);
     });
 
@@ -807,7 +806,6 @@
     }
     refs.viewChapters.addEventListener('click', () => {
       hide(refs.mainMenu);
-      hide(refs.startChallenge);
       show(refs.chapDisp);
       refs.searchInput.value = '';
       hide(refs.searchResults);
@@ -879,7 +877,6 @@
     // ### Frag Caesar ###
     refs.fragCaesar.addEventListener('click', () => {
       hide(refs.mainMenu);
-      hide(refs.startChallenge);
       show(refs.caesarSection);
     });
     refs.backCaesar.addEventListener('click', goHome);
@@ -894,7 +891,6 @@
       refs.challengeRange.value = up;
       refs.challengeVal.textContent = `Kapitel ${up}`;
       hide(refs.mainMenu);
-      hide(refs.startChallenge);
       show(refs.challengeDisp);
     });
     refs.challengeRange.addEventListener('input', () => {
@@ -936,10 +932,9 @@
       state.testList = shuffle(src).slice(0, n);
       state.results = [];
       state.idx = 0;
-      state.isChallenge = false; // Nur bei Challenge-Start true
+      state.isChallenge = false;
       hide(refs.countSel);
       hide(refs.mainMenu);
-      hide(refs.startChallenge);
       show(refs.quizSection);
       showQuestion();
     }
@@ -1043,7 +1038,6 @@
       hide(refs.listSelection);
       hide(refs.testTypeSelection);
       show(refs.mainMenu);
-      show(refs.startChallenge);
     }
     refs.backMenu.addEventListener('click', goHome);
     refs.homeBtn.addEventListener('click', goHome);
@@ -1078,7 +1072,7 @@
       state.customListsArr[index].vocabs.forEach((vocab, vocabIndex) => {
         const li = document.createElement('li');
         li.className = 'list-group-item d-flex justify-content-between';
-        li.innerHTML = `${vocab.term} — ${vocab.meaning} (${vocab.lesson || 'Manuell'}) <button class="btn btn-danger btn-sm" onclick="removeVocab(${vocabIndex})">Löschen</button>`;
+        li.innerHTML = `${vocab.term} — ${vocab.meaning} (${vocab.lesson || 'Manuell'}) <button class="btn btn-danger btn-sm" onclick="removeVocab(${index}, ${vocabIndex})">Löschen</button>`;
         refs.listDetailUl.appendChild(li);
       });
     }
@@ -1093,15 +1087,14 @@
       hide(refs.listSearchResults);
     }
 
-    window.removeVocab = function(vocabIndex) {
-      state.customListsArr[state.currentListIndex].vocabs.splice(vocabIndex, 1);
+    window.removeVocab = function(listIndex, vocabIndex) {
+      state.customListsArr[listIndex].vocabs.splice(vocabIndex, 1);
       saveCustomLists();
-      updateListDisplay(state.currentListIndex);
+      updateListDisplay(listIndex);
     };
 
     refs.customLists.addEventListener('click', () => {
       hide(refs.mainMenu);
-      hide(refs.startChallenge);
       show(refs.customListsSection);
       loadCustomLists();
     });
