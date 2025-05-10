@@ -72,7 +72,14 @@
     }
     #challenge-display .card { max-width: 480px; }
     #challenge-range { width: 100%; }
-
+    /* Mobile Optimierung */
+    .card { 
+      max-width: 100%; 
+      margin: 0 auto; 
+    }
+    .container { 
+      padding: 1rem; 
+    }
     /* Darkmode-Styling */
     body.dark-mode {
       background-color: #121212;
@@ -160,17 +167,16 @@
       <div class="col"><div id="frag-caesar" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-chat-dots display-4 text-success"></i><h5 class="mt-3">Frag Caesar</h5></div></div></div>
       <div class="col"><div id="custom-lists" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-list display-4 text-info"></i><h5 class="mt-3">Eigene Listen</h5></div></div></div>
       <div class="col"><div id="start-challenge" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-bar-chart-line display-4 text-warning"></i><h5 class="mt-3">Challenge</h5><small>20 Vokabeln</small></div></div></div>
-      <div class="col"><div id="test-list" class="card card-choice smooth"><div class="card-body text-center py-5"><i class="bi bi-question-circle display-4 text-info"></i><h5 class="mt-3">Liste ausfragen</h5></div></div></div>
     </div>
 
-    <!-- Wortanzahl-Auswahl -->
-    <div id="count-selection" class="text-center my-5 hidden smooth">
-      <button class="btn btn-outline-primary mx-2" data-count="15">15 Wörter</button>
-      <button class="btn btn-outline-primary mx-2" data-count="25">25 Wörter</button>
-      <button id="choose-count" class="btn btn-outline-secondary mx-2">Eigenes</button>
-      <div id="custom-count-div" class="mt-3 hidden">
-        <input type="number" id="custom-count" class="form-control d-inline-block w-auto" placeholder="Anzahl" min="1">
-        <button id="custom-count-btn" class="btn btn-primary ms-2">OK</button>
+    <!-- Test-Typ Auswahl -->
+    <div id="test-type-selection" class="hidden smooth">
+      <div class="card mx-auto" style="max-width:480px;">
+        <div class="card-body p-4 text-center">
+          <h5 class="mb-4">Wähle den Test-Typ</h5>
+          <button id="test-chapters" class="btn btn-primary mb-2 w-100">Kapitel</button>
+          <button id="test-lists" class="btn btn-primary w-100">Eigene Listen</button>
+        </div>
       </div>
     </div>
 
@@ -182,6 +188,17 @@
           <ul id="list-selection-ul" class="list-group"></ul>
           <button id="back-from-list-selection" class="btn btn-outline-secondary w-100 mt-3">Zurück</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Wortanzahl-Auswahl -->
+    <div id="count-selection" class="text-center my-5 hidden smooth">
+      <button class="btn btn-outline-primary mx-2" data-count="15">15 Wörter</button>
+      <button class="btn btn-outline-primary mx-2" data-count="25">25 Wörter</button>
+      <button id="choose-count" class="btn btn-outline-secondary mx-2">Eigenes</button>
+      <div id="custom-count-div" class="mt-3 hidden">
+        <input type="number" id="custom-count" class="form-control d-inline-block w-auto" placeholder="Anzahl" min="1">
+        <button id="custom-count-btn" class="btn btn-primary ms-2">OK</button>
       </div>
     </div>
 
@@ -217,7 +234,7 @@
 
     <!-- Challenge Einstellung -->
     <div id="challenge-display" class="hidden smooth">
-      <div class="card mx-auto">
+      <div class="card mx-auto" style="max-width:480px;">
         <div class="card-body p-4 text-center">
           <h5 class="mb-4">Bis Kapitel … gelernt?</h5>
           <input type="range" id="challenge-range" min="1" max="13" value="1">
@@ -289,247 +306,247 @@
     // ### Daten ###
     const lessons = {
       "Lektion 1": [
-        { term: "puella", meaning: "das Mädchen" },
-        { term: "serva", meaning: "die Sklavin, die Dienerin" },
-        { term: "silva", meaning: "der Wald" },
-        { term: "via", meaning: "der Weg, die Straße" },
-        { term: "villa", meaning: "das Haus, das Landhaus" },
-        { term: "avus", meaning: "der Großvater" },
-        { term: "campus", meaning: "das Feld, der freie Platz" },
-        { term: "equus", meaning: "das Pferd" },
-        { term: "murus", meaning: "die Mauer" },
-        { term: "servus", meaning: "der Sklave, der Diener" },
-        { term: "vicus", meaning: "das Dorf, die Gasse" },
-        { term: "et", meaning: "und" },
-        { term: "familia", meaning: "die Familie" }
+        { term:"puella",  meaning:"das Mädchen" },
+        { term:"serva",   meaning:"die Sklavin, die Dienerin" },
+        { term:"silva",   meaning:"der Wald" },
+        { term:"via",     meaning:"der Weg, die Straße" },
+        { term:"villa",   meaning:"das Haus, das Landhaus" },
+        { term:"avus",    meaning:"der Großvater" },
+        { term:"campus",  meaning:"das Feld, der freie Platz" },
+        { term:"equus",   meaning:"das Pferd" },
+        { term:"murus",   meaning:"die Mauer" },
+        { term:"servus",  meaning:"der Sklave, der Diener" },
+        { term:"vicus",   meaning:"das Dorf, die Gasse" },
+        { term:"et",      meaning:"und" },
+        { term:"familia", meaning:"die Familie" }
       ],
       "Lektion 2": [
-        { term: "esse", meaning: "sein, sich befinden" },
-        { term: "est", meaning: "er (sie, es) ist" },
-        { term: "sunt", meaning: "sie sind" },
-        { term: "amīca", meaning: "die Freundin" },
-        { term: "rīdēre", meaning: "lachen, auslachen" },
-        { term: "nōn", meaning: "nicht" },
-        { term: "cūr?", meaning: "warum?" },
-        { term: "pārēre", meaning: "gehorchen" },
-        { term: "monēre", meaning: "mahnen, ermahnen" },
-        { term: "dēbēre", meaning: "müssen, sollen" },
-        { term: "quid?", meaning: "was?" },
-        { term: "timēre", meaning: "fürchten, Angst haben" },
-        { term: "oculus", meaning: "das Auge" },
-        { term: "dolēre", meaning: "schmerzen, wehtun" },
-        { term: "nunc", meaning: "nun, jetzt" },
-        { term: "tacēre", meaning: "schweigen, verschweigen" },
-        { term: "Lydus servus", meaning: "der Sklave Lydus" }
+        { term:"esse",    meaning:"sein, sich befinden" },
+        { term:"est",     meaning:"er (sie, es) ist" },
+        { term:"sunt",    meaning:"sie sind" },
+        { term:"amīca",   meaning:"die Freundin" },
+        { term:"rīdēre",  meaning:"lachen, auslachen" },
+        { term:"nōn",     meaning:"nicht" },
+        { term:"cūr?",    meaning:"warum?" },
+        { term:"pārēre",  meaning:"gehorchen" },
+        { term:"monēre",  meaning:"mahnen, ermahnen" },
+        { term:"dēbēre",  meaning:"müssen, sollen" },
+        { term:"quid?",   meaning:"was?" },
+        { term:"timēre",  meaning:"fürchten, Angst haben" },
+        { term:"oculus",  meaning:"das Auge" },
+        { term:"dolēre",  meaning:"schmerzen, wehtun" },
+        { term:"nunc",    meaning:"nun, jetzt" },
+        { term:"tacēre",  meaning:"schweigen, verschweigen" },
+        { term:"Lydus servus", meaning:"der Sklave Lydus" }
       ],
       "Lektion 3": [
-        { term: "domīnus", meaning: "der Herr" },
-        { term: "ibi", meaning: "dort" },
-        { term: "sedēre", meaning: "sitzen" },
-        { term: "sed", meaning: "aber, sondern" },
-        { term: "respondēre", meaning: "antworten" },
-        { term: "augēre", meaning: "vergrößern, vermehren" },
-        { term: "nam", meaning: "denn, nämlich" },
-        { term: "tamen", meaning: "dennoch, jedoch" },
-        { term: "adhūc", meaning: "bis jetzt, noch" },
-        { term: "neque", meaning: "und nicht, auch nicht" },
-        { term: "neque ... neque", meaning: "weder ... noch" },
-        { term: "quis?", meaning: "wer?" },
-        { term: "docēre", meaning: "lehren, unterrichten" },
-        { term: "lingua", meaning: "die Sprache, die Rede" }
+        { term:"domīnus", meaning:"der Herr" },
+        { term:"ibi",     meaning:"dort" },
+        { term:"sedēre",  meaning:"sitzen" },
+        { term:"sed",     meaning:"aber, sondern" },
+        { term:"respondēre", meaning:"antworten" },
+        { term:"augēre",     meaning:"vergrößern, vermehren" },
+        { term:"nam",        meaning:"denn, nämlich" },
+        { term:"tamen",      meaning:"dennoch, jedoch" },
+        { term:"adhūc",      meaning:"bis jetzt, noch" },
+        { term:"neque",      meaning:"und nicht, auch nicht" },
+        { term:"neque ... neque", meaning:"weder ... noch" },
+        { term:"quis?",      meaning:"wer?" },
+        { term:"docēre",     meaning:"lehren, unterrichten" },
+        { term:"lingua",     meaning:"die Sprache, die Rede" }
       ],
       "Lektion 4": [
-        { term: "gaudēre", meaning: "sich freuen" },
-        { term: "amīcus", meaning: "der Freund" },
-        { term: "bene", meaning: "gut" },
-        { term: "studēre", meaning: "sich bemühen, studieren" },
-        { term: "tabula", meaning: "die Schreib-Tafel, das Gemälde" },
-        { term: "tenēre", meaning: "halten, festhalten, besitzen; beherrschen" },
-        { term: "praebēre", meaning: "geben, hinhalten" },
-        { term: "iam", meaning: "schon, bereits; nun" },
-        { term: "prīmō", meaning: "zuerst" },
-        { term: "tum", meaning: "da, dann, darauf, damals" },
-        { term: "rēctē", meaning: "richtig, zu Recht" },
-        { term: "nōn iam", meaning: "nicht mehr" },
-        { term: "saepe", meaning: "oft" },
-        { term: "numquam", meaning: "niemals" },
-        { term: "sīc", meaning: "so" },
-        { term: "semper", meaning: "immer" }
+        { term:"gaudēre",  meaning:"sich freuen" },
+        { term:"amīcus",   meaning:"der Freund" },
+        { term:"bene",     meaning:"gut" },
+        { term:"studēre",  meaning:"sich bemühen, studieren" },
+        { term:"tabula",   meaning:"die Schreib-Tafel, das Gemälde" },
+        { term:"tenēre",   meaning:"halten, festhalten, besitzen; beherrschen" },
+        { term:"praebēre", meaning:"geben, hinhalten" },
+        { term:"iam",      meaning:"schon, bereits; nun" },
+        { term:"prīmō",    meaning:"zuerst" },
+        { term:"tum",      meaning:"da, dann, darauf, damals" },
+        { term:"rēctē",    meaning:"richtig, zu Recht" },
+        { term:"nōn iam",  meaning:"nicht mehr" },
+        { term:"saepe",    meaning:"oft" },
+        { term:"numquam",  meaning:"niemals" },
+        { term:"sīc",      meaning:"so" },
+        { term:"semper",   meaning:"immer" }
       ],
       "Lektion 5": [
-        { term: "sonus", meaning: "der Ton, der Klang, das Geräusch" },
-        { term: "terrēre", meaning: "erschrecken" },
-        { term: "latēre", meaning: "verborgen sein" },
-        { term: "subitō", meaning: "plötzlich" },
-        { term: "gladius", meaning: "das Schwert" },
-        { term: "scelerātus", meaning: "der Verbrecher" },
-        { term: "flēre", meaning: "weinen, beweinen" },
-        { term: "placēre", meaning: "gefallen" },
-        { term: "torquēre", meaning: "drehen; quälen" },
-        { term: "tantum", meaning: "nur" },
-        { term: "cui?", meaning: "wem?" },
-        { term: "statim", meaning: "sofort" },
-        { term: "etiam", meaning: "auch, sogar" },
-        { term: "iterum", meaning: "wiederum, zum zweiten Mal" },
-        { term: "itaque", meaning: "deshalb" }
+        { term:"sonus",     meaning:"der Ton, der Klang, das Geräusch" },
+        { term:"terrēre",   meaning:"erschrecken" },
+        { term:"latēre",    meaning:"verborgen sein" },
+        { term:"subitō",    meaning:"plötzlich" },
+        { term:"gladius",   meaning:"das Schwert" },
+        { term:"scelerātus",meaning:"der Verbrecher" },
+        { term:"flēre",     meaning:"weinen, beweinen" },
+        { term:"placēre",   meaning:"gefallen" },
+        { term:"torquēre",  meaning:"drehen; quälen" },
+        { term:"tantum",    meaning:"nur" },
+        { term:"cui?",      meaning:"wem?" },
+        { term:"statim",    meaning:"sofort" },
+        { term:"etiam",     meaning:"auch, sogar" },
+        { term:"iterum",    meaning:"wiederum, zum zweiten Mal" },
+        { term:"itaque",    meaning:"deshalb" }
       ],
       "Lektion 6": [
-        { term: "cibus", meaning: "die Nahrung, die Speise, das Futter" },
-        { term: "habēre", meaning: "haben, halten" },
-        { term: "aqua", meaning: "das Wasser" },
-        { term: "complēre", meaning: "auffüllen, erfüllen" },
-        { term: "cōpia", meaning: "die Menge, der Vorrat" },
-        { term: "ventus", meaning: "der Wind" },
-        { term: "dēlēre", meaning: "zerstören, vernichten" },
-        { term: "populus", meaning: "das Volk" },
-        { term: "Aeolus", meaning: "(der Gott der Winde)" },
-        { term: "deus", meaning: "der Gott, die Gottheit" },
-        { term: "nātūra", meaning: "die Natur, das Wesen, die Beschaffenheit" },
-        { term: "flūvius", meaning: "der Fluss" },
-        { term: "profectō", meaning: "sicherlich, tatsächlich" },
-        { term: "gratia", meaning: "der Dank" },
-        { term: "gratiam habere", meaning: "danken, dankbar sein" }
+        { term:"cibus",    meaning:"die Nahrung, die Speise, das Futter" },
+        { term:"habēre",   meaning:"haben, halten" },
+        { term:"aqua",     meaning:"das Wasser" },
+        { term:"complēre", meaning:"auffüllen, erfüllen" },
+        { term:"cōpia",    meaning:"die Menge, der Vorrat" },
+        { term:"ventus",   meaning:"der Wind" },
+        { term:"dēlēre",   meaning:"zerstören, vernichten" },
+        { term:"populus",  meaning:"das Volk" },
+        { term:"Aeolus",   meaning:"(der Gott der Winde)" },
+        { term:"deus",     meaning:"der Gott, die Gottheit" },
+        { term:"nātūra",   meaning:"die Natur, das Wesen, die Beschaffenheit" },
+        { term:"flūvius",  meaning:"der Fluss" },
+        { term:"profectō", meaning:"sicherlich, tatsächlich" },
+        { term:"gratia",   meaning:"der Dank" },
+        { term:"gratiam habere", meaning:"danken, dankbar sein" }
       ],
       "Lektion 7": [
-        { term: "valēre", meaning: "gesund sein, stark sein, Einfluss haben" },
-        { term: "valē!", meaning: "Leb wohl!" },
-        { term: "valēte!", meaning: "Lebt wohl!" },
-        { term: "diū", meaning: "lange (Zeit)" },
-        { term: "lacrima", meaning: "die Träne" },
-        { term: "vidēre", meaning: "sehen" },
-        { term: "movēre", meaning: "bewegen, beeindrucken" },
-        { term: "mox", meaning: "bald" },
-        { term: "tandem", meaning: "endlich" },
-        { term: "īnsula", meaning: "die Insel; der Wohnblock" },
-        { term: "Rōma", meaning: "Rom" },
-        { term: "turba", meaning: "die (Menschen-)Menge" },
-        { term: "toga", meaning: "die Toga" },
-        { term: "tunica", meaning: "die Tunika" },
-        { term: "fīlia", meaning: "die Tochter" },
-        { term: "laetitia", meaning: "die Freude" }
+        { term:"valēre",   meaning:"gesund sein, stark sein, Einfluss haben" },
+        { term:"valē!",    meaning:"Leb wohl!" },
+        { term:"valēte!",  meaning:"Lebt wohl!" },
+        { term:"diū",      meaning:"lange (Zeit)" },
+        { term:"lacrima",  meaning:"die Träne" },
+        { term:"vidēre",   meaning:"sehen" },
+        { term:"movēre",   meaning:"bewegen, beeindrucken" },
+        { term:"mox",      meaning:"bald" },
+        { term:"tandem",   meaning:"endlich" },
+        { term:"īnsula",   meaning:"die Insel; der Wohnblock" },
+        { term:"Rōma",     meaning:"Rom" },
+        { term:"turba",    meaning:"die (Menschen-)Menge" },
+        { term:"toga",     meaning:"die Toga" },
+        { term:"tunica",   meaning:"die Tunika" },
+        { term:"fīlia",    meaning:"die Tochter" },
+        { term:"laetitia", meaning:"die Freude" }
       ],
       "Lektion 8": [
-        { term: "amāre", meaning: "lieben" },
-        { term: "libenter", meaning: "gerne" },
-        { term: "domina", meaning: "die Herrin, die Dame" },
-        { term: "rogāre", meaning: "fragen, bitten" },
-        { term: "labōrō", meaning: "arbeiten, sich anstrengen" },
-        { term: "parāre", meaning: "(vor)bereiten, vorhaben (m. Inf.); erwerben" },
-        { term: "vocāre", meaning: "rufen; nennen, benennen" },
-        { term: "ubi?", meaning: "wo?" },
-        { term: "properāre", meaning: "eilen, sich beeilen" },
-        { term: "cena", meaning: "das Essen, die Mahlzeit" }
+        { term:"amāre",     meaning:"lieben" },
+        { term:"libenter",  meaning:"gerne" },
+        { term:"domina",    meaning:"die Herrin, die Dame" },
+        { term:"rogāre",    meaning:"fragen, bitten" },
+        { term:"labōrō",    meaning:"arbeiten, sich anstrengen" },
+        { term:"parāre",    meaning:"(vor)bereiten, vorhaben (m. Inf.); erwerben" },
+        { term:"vocāre",    meaning:"rufen; nennen, benennen" },
+        { term:"ubi?",      meaning:"wo?" },
+        { term:"properāre", meaning:"eilen, sich beeilen" },
+        { term:"cena",      meaning:"das Essen, die Mahlzeit" }
       ],
       "Lektion 9": [
-        { term: "cēnāre", meaning: "essen" },
-        { term: "spectāre", meaning: "betrachten, anschauen, hinsehen" },
-        { term: "dubitāre", meaning: "zweifeln, zögern (m. Inf.)" },
-        { term: "Rōmānus", meaning: "der Römer, der Einwohner Roms" },
-        { term: "pūgna", meaning: "der Kampf" },
-        { term: "pūgnāre", meaning: "kämpfen" },
-        { term: "superāre", meaning: "besiegen, überwinden, übertreffen" },
-        { term: "modestia", meaning: "die Bescheidenheit, der Anstand" },
-        { term: "superbia", meaning: "der Stolz, der Hochmut" },
-        { term: "Syria", meaning: "Syrien" },
-        { term: "patria", meaning: "die Heimat" },
-        { term: "prōvincia", meaning: "die Provinz" },
-        { term: "clementia", meaning: "die Milde, die Nachsicht" },
-        { term: "imperāre", meaning: "befehlen, herrschen (über)" },
-        { term: "populīs imperāre", meaning: "über (die) Völker herrschen" },
-        { term: "dolus", meaning: "die List, die Täuschung" },
-        { term: "iniūria", meaning: "das Unrecht, die Beleidigung, die Rechtsverletzung" },
-        { term: "captīvus", meaning: "der Kriegsgefangene" },
-        { term: "fīlius", meaning: "der Sohn" }
+        { term: "cēnāre",       meaning:["essen"] },
+        { term: "spectāre",     meaning:["betrachten", "anschauen", "hinsehen"] },
+        { term: "dubitāre",     meaning:["zweifeln", "zögern (m. Inf.)"] },
+        { term: "Rōmānus",      meaning:["der Römer", "der Einwohner Roms"] },
+        { term: "pūgna",        meaning:["der Kampf"] },
+        { term: "pūgnāre",      meaning:["kämpfen"] },
+        { term: "superāre",     meaning:["besiegen", "überwinden", "übertreffen"] },
+        { term: "modestia",     meaning:["die Bescheidenheit", "der Anstand"] },
+        { term: "superbia",     meaning:["der Stolz", "der Hochmut"] },
+        { term: "Syria",        meaning:["Syrien"] },
+        { term: "patria",       meaning:["die Heimat"] },
+        { term: "prōvincia",    meaning:["die Provinz"] },
+        { term: "clementia",    meaning:["die Milde", "die Nachsicht"] },
+        { term: "imperāre",     meaning:["befehlen", "herrschen (über)"] },
+        { term: "populīs imperāre", meaning:["über (die) Völker herrschen"] },
+        { term: "dolus",        meaning:["die List", "die Täuschung"] },
+        { term: "iniūria",      meaning:["das Unrecht", "die Beleidigung", "die Rechtsverletzung"] },
+        { term: "captīvus",     meaning:["der Kriegsgefangene"] },
+        { term: "fīlius",       meaning:["der Sohn"] }
       ],
       "Lektion 10": [
-        { term: "patēre", meaning: "offenstehen" },
-        { term: "exspectāre", meaning: "warten (auf), erwarten" },
-        { term: "venīre", meaning: "kommen" },
-        { term: "audīre", meaning: "hören" },
-        { term: "nihil", meaning: "nichts" },
-        { term: "lūdus", meaning: "das Spiel, die Schule" },
-        { term: "scīre", meaning: "wissen, kennen, verstehen" },
-        { term: "unde?", meaning: "woher?" },
-        { term: "Europa", meaning: "Europa" },
-        { term: "Crēta", meaning: "Kreta" },
-        { term: "dēsīderāre", meaning: "sich sehnen nach, vermissen" },
-        { term: "nescīre", meaning: "nicht wissen, nicht kennen, nicht verstehen" },
-        { term: "Sicilia", meaning: "Sizilien" },
-        { term: "Aetna", meaning: "der Ätna" },
-        { term: "ut", meaning: "wie" },
-        { term: "Vulcānus", meaning: "Vulkan(us) (Gott des Feuers)" },
-        { term: "habitāre", meaning: "wohnen, bewohnen" }
+        { term: "patēre",       meaning:["offenstehen"] },
+        { term: "exspectāre",   meaning:["warten (auf)", "erwarten"] },
+        { term: "venīre",       meaning:["kommen"] },
+        { term: "audīre",       meaning:["hören"] },
+        { term: "nihil",        meaning:["nichts"] },
+        { term: "lūdus",        meaning:["das Spiel", "die Schule"] },
+        { term: "scīre",        meaning:["wissen", "kennen", "verstehen"] },
+        { term: "unde?",        meaning:["woher?"] },
+        { term: "Europa",       meaning:["Europa"] },
+        { term: "Crēta",        meaning:["Kreta"] },
+        { term: "dēsīderāre",   meaning:["sich sehnen nach", "vermisse n („Ich sehne mich danach, die Heimat zu sehen.“)"] },
+        { term: "nescīre",      meaning:["nicht wissen", "nicht kennen", "nicht verstehen"] },
+        { term: "Sicilia",      meaning:["Sizilien"] },
+        { term: "Aetna",        meaning:["der Ätna"] },
+        { term: "ut",           meaning:["wie"] },
+        { term: "Vulcānus",     meaning:["Vulkan(us) (Gott des Feuers)"] },
+        { term: "habitāre",     meaning:["wohnen", "bewohnen"] }
       ],
       "Lektion 11": [
-        { term: "discīpulus", meaning: "der Schüler" },
-        { term: "ingenium", meaning: "die Begabung, das Talent, der Verstand" },
-        { term: "cōnsilium", meaning: "die Beratung, der Beschluss, der Plan, der Rat" },
-        { term: "hodiē", meaning: "heute (Adv.)" },
-        { term: "Capitōlium", meaning: "das Kapitol (bedeutendster Hügel Roms)" },
-        { term: "templum", meaning: "der Tempel" },
-        { term: "aedificium", meaning: "das Gebäude" },
-        { term: "forum", meaning: "das Forum, der Marktplatz" },
-        { term: "cūria", meaning: "die Kurie (Sitzungsgebäude des Senats)" },
-        { term: "dea", meaning: "die Göttin" },
-        { term: "Sātūrnus", meaning: "Saturn (der Gott der Saat und der Zeit)" },
-        { term: "Cōncordia", meaning: "Concordia (die Göttin der Eintracht)" },
-        { term: "studium", meaning: "die Beschäftigung, das Engagement, das Interesse" },
-        { term: "aedificāre", meaning: "bauen" },
-        { term: "porta", meaning: "das Tor" },
-        { term: "beneficium", meaning: "die Wohltat" },
-        { term: "frūmentum", meaning: "das Getreide" },
-        { term: "statua", meaning: "die Statue" },
-        { term: "dōnum", meaning: "das Geschenk" },
-        { term: "verbum", meaning: "das Wort, die Äußerung" }
+        { term: "discīpulus",   meaning:["der Schüler"] },
+        { term: "ingenium",     meaning:["die Begabung", "das Talent", "der Verstand"] },
+        { term: "cōnsilium",    meaning:["die Beratung", "der Beschluss", "der Plan", "der Rat"] },
+        { term: "hodiē",        meaning:["heute (Adv.)"] },
+        { term: "Capitōlium",   meaning:["das Kapitol (bedeutendster Hügel Roms)"] },
+        { term: "templum",      meaning:["der Tempel"] },
+        { term: "aedificium",   meaning:["das Gebäude"] },
+        { term: "forum",        meaning:["das Forum", "der Marktplatz"] },
+        { term: "cūria",        meaning:["die Kurie (Sitzungsgebäude des Senats)"] },
+        { term: "dea",          meaning:["die Göttin"] },
+        { term: "Sātūrnus",     meaning:["Saturn (der Gott der Saat und der Zeit)"] },
+        { term: "Cōncordia",    meaning:["Concordia (die Göttin der Eintracht)"] },
+        { term: "studium",      meaning:["die Beschäftigung", "das Engagement", "das Interesse"] },
+        { term: "aedificāre",   meaning:["bauen"] },
+        { term: "porta",        meaning:["das Tor"] },
+        { term: "beneficium",   meaning:["die Wohltat"] },
+        { term: "frūmentum",    meaning:["das Getreide"] },
+        { term: "statua",       meaning:["die Statue"] },
+        { term: "dōnum",        meaning:["das Geschenk"] },
+        { term: "verbum",       meaning:["das Wort", "die Äußerung"] }
       ],
       "Lektion 12": [
-        { term: "basilica", meaning: "die Markthalle, die Gerichtshalle" },
-        { term: "ad", meaning: "zu, bei, nach, an (m. Akk.)" },
-        { term: "ad portam esse / venīre", meaning: "beim Tor sein, zum Tor kommen" },
-        { term: "ante", meaning: "vor (m. Akk.)" },
-        { term: "ante vīllam / ante cēnam", meaning: "vor dem Landhaus, vor dem Essen" },
-        { term: "umbra", meaning: "der Schatten" },
-        { term: "post", meaning: "hinter, nach (m. Akk.)" },
-        { term: "post vīllam / post cēnam", meaning: "hinter dem Landhaus, nach dem Essen" },
-        { term: "ōrnāmentum", meaning: "der Schmuck, das Schmuckstück" },
-        { term: "cum", meaning: "mit (m. Abl.)" },
-        { term: "quīnque", meaning: "fünf" },
-        { term: "sex", meaning: "sechs" },
-        { term: "septem", meaning: "sieben" },
-        { term: "probāre", meaning: "für gut befinden" },
-        { term: "pretium", meaning: "der Preis, der Wert" },
-        { term: "indīcāre", meaning: "anzeigen, melden" },
-        { term: "sine", meaning: "ohne (Präp. m. Abl.)" },
-        { term: "e/ex", meaning: "aus, von … her (Präp. m. Abl.)" },
-        { term: "in", meaning: "in, an, auf, bei (wo? – Präp. m. Abl.)" },
-        { term: "in aquā", meaning: "im Wasser (Präp. m. Abl.)" },
-        { term: "manēre", meaning: "bleiben, (er)warten" },
-        { term: "in (m. Akk.)", meaning: "in … hinein, nach (wohin?)" },
-        { term: "in aquam", meaning: "ins Wasser (Präp. m. Akk.)" }
+        { term: "basilica",      meaning:["die Markthalle", "die Gerichtshalle"] },
+        { term: "ad",            meaning:["zu, bei, nach, an (m. Akk.)"] },
+        { term: "ad portam esse / venīre", meaning:["beim Tor sein", "zum Tor kommen"] },
+        { term: "ante",          meaning:["vor (m. Akk.)"] },
+        { term: "ante vīllam / ante cēnam", meaning:["vor dem Landhaus", "vor dem Essen"] },
+        { term: "umbra",         meaning:["der Schatten"] },
+        { term: "post",          meaning:["hinter, nach (m. Akk.)"] },
+        { term: "post vīllam / post cēnam", meaning:["hinter dem Landhaus", "nach dem Essen"] },
+        { term: "ōrnāmentum",   meaning:["der Schmuck", "das Schmuckstück"] },
+        { term: "cum",           meaning:["mit (m. Abl.)"] },
+        { term: "quīnque",       meaning:["fünf"] },
+        { term: "sex",           meaning:["sechs"] },
+        { term: "septem",        meaning:["sieben"] },
+        { term: "probāre",       meaning:["für gut befinden"] },
+        { term: "pretium",       meaning:["der Preis", "der Wert"] },
+        { term: "indīcāre",      meaning:["anzeigen", "melden"] },
+        { term: "sine",          meaning:["ohne (Präp. m. Abl.)"] },
+        { term: "e/ex",          meaning:["aus", "von … her (Präp. m. Abl.)"] },
+        { term: "in",            meaning:["in, an, auf, bei (wo? – Präp. m. Abl.)"] },
+        { term: "in aquā",       meaning:["im Wasser (Präp. m. Abl.)"] },
+        { term: "manēre",        meaning:["bleiben", "(er)warten"] },
+        { term: "in (m. Akk.)",  meaning:["in … hinein, nach (wohin?)"] },
+        { term: "in aquam",      meaning:["ins Wasser (Präp. m. Akk.)"] }
       ],
       "Lektion 13": [
-        { term: "ego", meaning: "ich (betont)" },
-        { term: "tū", meaning: "du (betont)" },
-        { term: "-ne", meaning: "Partikel im dir. Fragesatz (unübersetzt)" },
-        { term: "vidēsne aedificium?", meaning: "Siehst du das Gebäude?" },
-        { term: "vōs", meaning: "ihr (betont), euch (Akk.)" },
-        { term: "mihi", meaning: "mir (Dat.)" },
-        { term: "mē", meaning: "mich (Akk.)" },
-        { term: "tēcum", meaning: "mit dir" },
-        { term: "nōs", meaning: "wir (betont)" },
-        { term: "vōbīscum", meaning: "mit euch" },
-        { term: "tibi", meaning: "dir (Dat.)" },
-        { term: "nos", meaning: "uns (Akk.)" },
-        { term: "nōbīs", meaning: "uns (Dat.)" },
-        { term: "vobis", meaning: "euch (Dat.)" },
-        { term: "ita", meaning: "so" },
-        { term: "vos", meaning: "euch (Akk.)" },
-        { term: "clamare", meaning: "laut rufen, schreien" },
-        { term: "errare", meaning: "umherirren, (sich) irren" },
-        { term: "invenire", meaning: "finden, erfinden" },
-        { term: "te", meaning: "dich (Akk.)" },
-        { term: "sine me", meaning: "ohne mich" },
-        { term: "liberare", meaning: "befreien, freilassen" }
+        { term: "ego",            meaning:["ich (betont)"] },
+        { term: "tū",             meaning:["du (betont)"] },
+        { term: "-ne",            meaning:["Partikel im dir. Fragesatz (unübersetzt)"] },
+        { term: "vidēsne aedificium?", meaning:["Siehst du das Gebäude?"] },
+        { term: "vōs",            meaning:["ihr (betont)", "euch (Akk.)"] },
+        { term: "mihi",           meaning:["mir (Dat.)"] },
+        { term: "mē",             meaning:["mich (Akk.)"] },
+        { term: "tēcum",          meaning:["mit dir"] },
+        { term: "nōs",            meaning:["wir (betont)"] },
+        { term: "vōbīscum",       meaning:["mit euch"] },
+        { term: "tibi",           meaning:["dir (Dat.)"] },
+        { term: "nos",            meaning:["uns (Akk.)"] },
+        { term: "nōbīs",          meaning:["uns (Dat.)"] },
+        { term: "vobis",          meaning:["euch (Dat.)"] },
+        { term: "ita",            meaning:["so"] },
+        { term: "vos",            meaning:["euch (Akk.)"] },
+        { term: "clamare",        meaning:["laut rufen", "schreien"] },
+        { term: "errare",         meaning:["umherirren", "(sich) irren"] },
+        { term: "invenire",       meaning:["finden", "erfinden"] },
+        { term: "te",             meaning:["dich (Akk.)"] },
+        { term: "sine me",        meaning:["ohne mich"] },
+        { term: "liberare",       meaning:["befreien", "freilassen"] }
       ]
     };
 
@@ -553,7 +570,9 @@
       fragCaesar: document.getElementById('frag-caesar'),
       customLists: document.getElementById('custom-lists'),
       startChallenge: document.getElementById('start-challenge'),
-      testList: document.getElementById('test-list'),
+      testTypeSelection: document.getElementById('test-type-selection'),
+      testChapters: document.getElementById('test-chapters'),
+      testLists: document.getElementById('test-lists'),
       listSelection: document.getElementById('list-selection'),
       listSelectionUl: document.getElementById('list-selection-ul'),
       backFromListSelection: document.getElementById('back-from-list-selection'),
@@ -619,7 +638,10 @@
       currentListIndex: null,
       flameCount: parseInt(localStorage.getItem('flameCount') || '0'),
       lastDate: localStorage.getItem('lastChallengeDate') || '',
-      selectedListForTest: null
+      selectedTestType: null,
+      selectedListForTest: null,
+      maxVocabCount: null,
+      isChallenge: false
     };
 
     // ### Persistenz ###
@@ -683,14 +705,34 @@
       });
     });
 
-    // ### Liste ausfragen ###
-    refs.testList.addEventListener('click', () => {
+    // ### Test-Typ Auswahl ###
+    refs.startTest.addEventListener('click', () => {
       hide(refs.mainMenu);
       hide(refs.startChallenge);
+      show(refs.testTypeSelection);
+    });
+
+    refs.testChapters.addEventListener('click', () => {
+      state.selectedTestType = 'chapters';
+      state.maxVocabCount = allVocab().length;
+      hide(refs.testTypeSelection);
+      show(refs.countSel);
+      adjustCountSelection(state.maxVocabCount);
+    });
+
+    refs.testLists.addEventListener('click', () => {
+      state.selectedTestType = 'lists';
+      hide(refs.testTypeSelection);
       show(refs.listSelection);
       loadListSelection();
     });
 
+    refs.backFromListSelection.addEventListener('click', () => {
+      hide(refs.listSelection);
+      show(refs.testTypeSelection);
+    });
+
+    // ### Listen ausfragen ###
     function loadListSelection() {
       refs.listSelectionUl.innerHTML = '';
       state.customListsArr.forEach((list, index) => {
@@ -704,20 +746,43 @@
 
     function selectListForTest(index) {
       state.selectedListForTest = index;
+      state.maxVocabCount = state.customListsArr[index].vocabs.length;
       hide(refs.listSelection);
       show(refs.countSel);
+      adjustCountSelection(state.maxVocabCount);
     }
 
-    refs.backFromListSelection.addEventListener('click', goHome);
+    // ### Wortanzahl-Auswahl ###
+    function adjustCountSelection(maxCount) {
+      const countButtons = refs.countSel.querySelectorAll('[data-count]');
+      countButtons.forEach(btn => {
+        const count = parseInt(btn.dataset.count);
+        if (count > maxCount) {
+          btn.classList.add('disabled');
+          btn.disabled = true;
+        } else {
+          btn.classList.remove('disabled');
+          btn.disabled = false;
+        }
+      });
+      refs.customDiv.querySelector('#custom-count').max = maxCount;
+    }
 
-    // ### Wortanzahl-Auswahl für Liste ###
-    document.querySelectorAll('[data-count]').forEach(b =>
-      b.addEventListener('click', () => beginTest(false, +b.dataset.count, state.selectedListForTest))
-    );
+    refs.countSel.addEventListener('click', e => {
+      if (e.target.classList.contains('btn') && !e.target.classList.contains('disabled') && e.target.dataset.count) {
+        const count = parseInt(e.target.dataset.count);
+        beginTest(false, count);
+      }
+    });
+
     refs.chooseCount.addEventListener('click', () => refs.customDiv.classList.remove('hidden'));
     refs.customBtn.addEventListener('click', () => {
       const n = parseInt(document.getElementById('custom-count').value);
-      n > 0 ? beginTest(false, n, state.selectedListForTest) : alert('Bitte gültige Zahl.');
+      if (n > 0 && n <= state.maxVocabCount) {
+        beginTest(false, n);
+      } else {
+        alert(`Bitte eine Zahl zwischen 1 und ${state.maxVocabCount} eingeben.`);
+      }
     });
 
     // ### Kapitel ansehen ###
@@ -837,50 +902,41 @@
       localStorage.setItem('challengeUpTo', refs.challengeRange.value);
     });
     refs.challengeStart.addEventListener('click', () => {
-      const up = parseInt(refs.challengeRange.value), all = allVocab().filter(v => parseInt(v.lesson.split(' ')[1]) <= up);
+      const up = parseInt(refs.challengeRange.value);
+      const all = allVocab().filter(v => parseInt(v.lesson.split(' ')[1]) <= up);
       if (!all.length) return alert('Keine Vokabeln in den gewählten Kapiteln.');
       state.testList = shuffle(all).slice(0, 20);
       state.results = [];
       state.idx = 0;
+      state.isChallenge = true;
       hide(refs.challengeDisp);
       show(refs.quizSection);
       showQuestion();
     });
 
     // ### Quiz / Test-Logik ###
-    refs.startTest.addEventListener('click', () => {
-      hide(refs.mainMenu);
-      hide(refs.startChallenge);
-      show(refs.countSel);
-    });
     refs.testRed.addEventListener('click', () => beginTest(true));
-    document.querySelectorAll('[data-count]').forEach(b =>
-      b.addEventListener('click', () => beginTest(false, +b.dataset.count))
-    );
-    refs.chooseCount.addEventListener('click', () => refs.customDiv.classList.remove('hidden'));
-    refs.customBtn.addEventListener('click', () => {
-      const n = parseInt(document.getElementById('custom-count').value);
-      n > 0 ? beginTest(false, n) : alert('Bitte gültige Zahl.');
-    });
-
-    function beginTest(useRed = false, count = null, listIndex = null) {
+    function beginTest(useRed = false, count = null) {
       let src;
       if (useRed) {
         src = state.redFolder.map(t => allVocab().find(v => v.term === t)).filter(Boolean);
-      } else if (listIndex !== null) {
-        src = state.customListsArr[listIndex].vocabs.map(v => ({ term: v.term, meaning: v.meaning }));
-      } else if (state.selectedChapters.has('all')) {
-        src = allVocab();
-      } else {
-        src = [...state.selectedChapters].flatMap(lek => lessons[lek].map(v => ({ ...v, lesson: lek })));
+      } else if (state.selectedTestType === 'lists') {
+        src = state.customListsArr[state.selectedListForTest].vocabs.map(v => ({ term: v.term, meaning: v.meaning }));
+      } else if (state.selectedTestType === 'chapters') {
+        if (state.selectedChapters.has('all')) {
+          src = allVocab();
+        } else {
+          src = [...state.selectedChapters].flatMap(lek => lessons[lek].map(v => ({ ...v, lesson: lek })));
+        }
       }
-      if (!src.length) {
+      if (!src || !src.length) {
         return alert(useRed ? 'Keine roten Vokabeln.' : 'Keine Vokabeln in dieser Auswahl.');
       }
       const n = (!count || count > src.length) ? src.length : count;
       state.testList = shuffle(src).slice(0, n);
       state.results = [];
       state.idx = 0;
+      state.isChallenge = false; // Nur bei Challenge-Start true
       hide(refs.countSel);
       hide(refs.mainMenu);
       hide(refs.startChallenge);
@@ -956,7 +1012,7 @@
         refs.reviewCont.appendChild(d);
       });
       show(refs.resultSection);
-      if (state.lastDate !== today) {
+      if (state.isChallenge && state.lastDate !== today) {
         state.flameCount++;
         localStorage.setItem('flameCount', state.flameCount);
         localStorage.setItem('lastChallengeDate', today);
@@ -985,6 +1041,7 @@
       hide(refs.customListsSection);
       hide(refs.listDetailSection);
       hide(refs.listSelection);
+      hide(refs.testTypeSelection);
       show(refs.mainMenu);
       show(refs.startChallenge);
     }
